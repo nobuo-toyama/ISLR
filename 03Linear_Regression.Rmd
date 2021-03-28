@@ -1,0 +1,45 @@
+---
+title: "3 Linear Regression"
+author: "nobuo"
+date: "2021/3/29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Linear Regression
+
+## Lab
+
+Install ISLR.
+
+```{r}
+library(MASS)
+library(ISLR)
+```
+
+### Simple Linear Regression
+
+```{r}
+names(Boston)
+fit <- lm(medv ~ lstat, data = Boston)
+fit
+```
+Summary of the fit.
+
+```{r}
+summary(fit)
+```
+```{r}
+names(fit)
+coef(fit)
+confint(fit)
+```
+Prediction
+```{r}
+predict(fit, data.frame(lstat = c(5, 10, 15)), interval = "confidence")
+```
+
+
+
