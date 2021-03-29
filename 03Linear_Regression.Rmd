@@ -62,6 +62,48 @@ which.max(hatvalues(fit))
 
 ### Multiple Linear Regression
 
+```{r}
+fit <- lm(medv ~ lstat + age, data = Boston)
+summary(fit)
+```
+```{r}
+fit <- lm(medv ~ ., data = Boston)
+summary(fit)
+```
 
+```{r}
+library(car)
+vif(fit)
+```
+```{r}
+fit1 <- lm(medv ~ . - age, data = Boston)
+summary(fit1)
+```
+
+```{r}
+summary(lm(medv ~ lstat * age, data = Boston))
+```
+
+### Non-linear Transformations of the Predictors
+```{r}
+fit2 <- lm(medv ~ lstat + I(lstat^2), data = Boston)
+summary(fit2)
+```
+```{r}
+fit <- lm(medv ~ lstat, data = Boston)
+anova(fit, fit2)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(fit2)
+```
+
+
+```{r}
+fit5 <- lm(medv ~ poly(lstat, 5), data = Boston)
+summary(fit5)
+```
+###  Qualitative Predictors
 
 
