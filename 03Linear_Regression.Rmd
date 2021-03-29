@@ -106,4 +106,15 @@ summary(fit5)
 ```
 ###  Qualitative Predictors
 
+```{r}
+data("Carseats")
+names(Carseats)
+```
 
+```{r}
+fit <- lm(Sales ~ . + Income:Advertising + Price:Age, data = Carseats)
+summary(fit)
+```
+```{r}
+contrasts(Carseats$ShelveLoc)
+```
