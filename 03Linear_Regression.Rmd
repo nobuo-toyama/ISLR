@@ -39,7 +39,29 @@ confint(fit)
 Prediction
 ```{r}
 predict(fit, data.frame(lstat = c(5, 10, 15)), interval = "confidence")
+predict(fit, data.frame(lstat = c(5, 10, 15)), interval = "prediction")
 ```
+```{r}
+plot(Boston$lstat, Boston$medv)
+abline(fit)
+```
+diagnostic plots
+```{r}
+par(mfrow = c(2, 2))
+plot(fit)
+```
+
+```{r}
+plot(predict(fit), rstudent (fit))
+```
+
+```{r}
+plot(hatvalues(fit))
+which.max(hatvalues(fit))
+```
+
+### Multiple Linear Regression
+
 
 
 
