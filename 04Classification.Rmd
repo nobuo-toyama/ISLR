@@ -1,0 +1,83 @@
+---
+title: "4 Classification"
+author: "nobuo"
+date: "2021/3/30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Lab: Logistic Regression, LDA, QDA, and KNN
+
+### The Stock Market Data
+
+```{r}
+library(ISLR)
+names(Smarket)
+dim(Smarket)
+summary(Smarket)
+pairs(Smarket)
+```
+```{r}
+cor(Smarket[ ,-9])
+```
+
+
+
+```{r}
+```
+```{r}
+plot(Smarket$Volume)
+```
+### Logistic Regression
+```{r}
+glm.fits <- glm(Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, family = binomial, data = Smarket)
+summary(glm.fits)
+coef(glm.fits)
+```
+```{r}
+glm.probs <- predict(glm.fits, type = "response")
+glm.probs[1:10]
+contrasts(Smarket$Direction)
+```
+The following two commands create a vector of class predictions based on whether the predicted probability of a market increase is greater than or less than 0.5.
+
+```{r}
+glm.pred <- rep("Down", 1250)
+glm.pred[glm.probs > 0.5] <- "Up"
+```
+Given these predictions, the `table()` function can be used to produce a confusion matrix in order to determine how many observations were correctly or incorrectly classified.
+```{r}
+table(glm.pred, Smarket$Direction)
+(145 + 507)/1250
+mean(glm.pred==Smarket$Direction)
+
+```
+To implement this strategy, we will first create a vector corresponding to the observations from 2001 through 2004. We will then use this vector to create a held out data set of observations from 2005.
+
+```{r}
+train <- Smarket$Year < 2005
+Smarket.2005 <- Smarket[!train, ]
+dim(Smarket.2005)
+Direction.2005 <- Smarket$Direction[!train]
+glm.fits <- glm(Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, family = binomial, data = Smarket, subset = train)
+glm.probs <- predict(glm.fits, Smarket.2005, type = "response")
+
+glm.pred <- rep("Down", 252)
+glm.pred[glm.probs > 0.5] <- "Up"
+table(glm.pred, Direction.2005)
+mean(glm.pred == Direction.2005)
+mean(glm.pred != Direction.2005)
+```
+```{r}
+glm.fits <- glm(Direction ~ Lag1 + Lag2, family = binomial, data = Smarket, subset = train)
+glm.probs <- predict(glm.fits, Smarket.2005, type = "response")
+glm.pred <- rep("Down", 252)
+glm.pred[glm.probs > 0.5] <- "Up"
+table(glm.pred, Direction.2005)
+mean(glm.pred == Direction.2005)
+```
+### Linear Discriminant Analysis
+
